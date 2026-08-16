@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "id": "deepseek-whale",
+  "name": "鲸鱼娘（原图）",
+  "version": "1.0.0",
+  "author": "you",
+  "description": "鲸鱼娘（原图）（JPG 主图宠物，由 assets/deepseek-whale 生成）",
+  "mode": "raster",
+  "size": {
+    "min": 96,
+    "max": 320,
+    "default": 200
+  },
+  "image": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/idle.webp",
+  "images": {
+    "idle": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/idle.webp",
+    "typing": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/typing.webp",
+    "thinking": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/thinking.webp",
+    "working": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/working.webp",
+    "done": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/done.webp",
+    "error": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/error.webp",
+    "happy": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/happy.webp",
+    "eat": "/plugins/dsh-client-ui-pet/assets/deepseek-whale/eat.webp"
+  },
+  "states": {
+    "idle": {
+      "label": "空闲",
+      "hold": true
+    },
+    "typing": {
+      "label": "注视",
+      "hold": true
+    },
+    "thinking": {
+      "label": "思考",
+      "hold": true
+    },
+    "working": {
+      "label": "忙碌",
+      "hold": true
+    },
+    "done": {
+      "label": "完成",
+      "hold": false
+    },
+    "error": {
+      "label": "担心",
+      "hold": false
+    },
+    "happy": {
+      "label": "开心",
+      "hold": false
+    },
+    "eat": {
+      "label": "吃饭",
+      "hold": false
+    },
+    "play": {
+      "label": "玩耍",
+      "hold": false
+    },
+    "sleep": {
+      "label": "睡觉",
+      "hold": true
+    }
+  },
+  "behaviors": [
+    {
+      "trigger": "activity:typing",
+      "state": "typing",
+      "hold": true,
+      "cooldownMs": 4000
+    },
+    {
+      "trigger": "activity:thinking",
+      "state": "thinking",
+      "hold": true,
+      "cooldownMs": 20000
+    },
+    {
+      "trigger": "activity:working",
+      "state": "working",
+      "hold": true,
+      "cooldownMs": 20000
+    },
+    {
+      "trigger": "activity:done",
+      "state": "done",
+      "effect": "sparkles",
+      "mood": 2,
+      "affinity": 1
+    },
+    {
+      "trigger": "activity:error",
+      "state": "error",
+      "effect": "drop",
+      "mood": -3
+    },
+    {
+      "trigger": "sleep",
+      "state": "sleep",
+      "hold": true,
+      "effect": "zzz"
+    },
+    {
+      "trigger": "wake",
+      "state": "idle",
+      "hold": true,
+      "bubbles": [
+        "睡醒啦！"
+      ]
+    },
+    {
+      "trigger": "birth",
+      "state": "happy",
+      "effect": "hearts",
+      "bubbles": [
+        "你好呀，我叫{name}！"
+      ]
+    }
+  ],
+  "interactions": {
+    "pet": {
+      "state": "happy",
+      "effect": "hearts",
+      "mood": 5,
+      "affinity": 1,
+      "cooldownMs": 1500
+    },
+    "feed": {
+      "state": "eat",
+      "effect": "food",
+      "mood": 12,
+      "affinity": 2,
+      "cooldownMs": 4000
+    },
+    "play": {
+      "state": "play",
+      "effect": "sparkles",
+      "mood": 8,
+      "affinity": 2,
+      "cooldownMs": 3000
+    }
+  },
+  "bubbles": {
+    "idle": [
+      "我在哦～"
+    ],
+    "sleep": [
+      "Zzz…"
+    ],
+    "happy": [
+      "开心！"
+    ],
+    "working": [
+      "忙起来啦～"
+    ],
+    "done": [
+      "完成啦！"
+    ],
+    "error": [
+      "哎呀，出错了"
+    ]
+  }
+}

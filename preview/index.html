@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>dsh-client-ui-pet · 独立预览</title>
+  <style>
+    :root {
+      --dsw-alias-label-primary: #0f172a;
+      --dsw-alias-label-secondary: #334155;
+      --dsw-alias-label-tertiary: #475569;
+      --dsw-alias-label-dimmed: rgba(51, 65, 85, 0.55);
+      --dsw-alias-bg-base: #f1f5f9;
+      --dsw-alias-bg-layer-1: rgba(255, 255, 255, 0.62);
+      --dsw-alias-bg-overlay: rgba(255, 255, 255, 0.95);
+      --dsw-alias-bg-skeleton: rgba(15, 23, 42, 0.08);
+      --dsw-alias-border-l2: rgba(0, 0, 0, 0.08);
+      --dsw-alias-interactive-bg-hover: rgba(38, 49, 72, 0.08);
+      --dsw-alias-interactive-bg-active: rgba(38, 49, 72, 0.12);
+      --dsw-alias-state-success-primary: #16a34a;
+      --dsw-alias-state-error-primary: #dc2626;
+      --dsw-alias-state-warn-label: rgba(180, 83, 9, 0.9);
+      --dsw-alias-label-primary-bluish: #1e3a8a;
+      --dsw-alias-state-business-tertiary: rgba(219, 234, 254, 0.6);
+      color-scheme: light dark;
+    }
+    body[data-ds-dark-theme] {
+      --dsw-alias-label-primary: #e2e8f0;
+      --dsw-alias-label-secondary: #cbd5e1;
+      --dsw-alias-label-tertiary: #94a3b8;
+      --dsw-alias-label-dimmed: rgba(148, 163, 184, 0.55);
+      --dsw-alias-bg-base: #0b1220;
+      --dsw-alias-bg-layer-1: rgba(30, 41, 59, 0.55);
+      --dsw-alias-bg-overlay: rgba(15, 23, 42, 0.95);
+      --dsw-alias-bg-skeleton: rgba(226, 232, 240, 0.12);
+      --dsw-alias-border-l2: rgba(255, 255, 255, 0.08);
+      --dsw-alias-interactive-bg-hover: rgba(255, 255, 255, 0.08);
+      --dsw-alias-interactive-bg-active: rgba(255, 255, 255, 0.12);
+      --dsw-alias-state-success-primary: #4ade80;
+      --dsw-alias-state-error-primary: #f87171;
+      --dsw-alias-state-warn-label: #fbbf24;
+      --dsw-alias-label-primary-bluish: #bfdbfe;
+      --dsw-alias-state-business-tertiary: rgba(30, 58, 138, 0.5);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--dsw-alias-bg-base);
+      color: var(--dsw-alias-label-primary);
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .stage-area {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 24px;
+      flex-wrap: wrap;
+    }
+    .demo-card {
+      width: min(420px, 100%);
+      border: 1px solid var(--dsw-alias-border-l2);
+      border-radius: 16px;
+      background: var(--dsw-alias-bg-overlay);
+      box-shadow: 0 16px 48px rgba(15, 23, 42, 0.16);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .demo-card h1 { font-size: 16px; margin: 0; }
+    .demo-card p { font-size: 12px; color: var(--dsw-alias-label-tertiary); margin: 0; }
+    .demo-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .demo-card button, .demo-card textarea {
+      font: inherit;
+      border-radius: 10px;
+      border: 1px solid var(--dsw-alias-border-l2);
+      background: var(--dsw-alias-bg-layer-1);
+      color: var(--dsw-alias-label-primary);
+      padding: 8px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .demo-card button:hover { background: var(--dsw-alias-interactive-bg-hover); }
+    .demo-card textarea {
+      width: 100%;
+      height: 72px;
+      resize: vertical;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 11px;
+    }
+    .sim {
+      border: 1px dashed var(--dsw-alias-border-l2);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .sim label { display: inline-flex; align-items: center; gap: 8px; }
+    .sim .row { display: flex; align-items: center; gap: 8px; }
+    .state-out {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 11px;
+      color: var(--dsw-alias-label-tertiary);
+      min-height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-area">
+    <div class="demo-card">
+      <h1>dsh-client-ui-pet 独立预览</h1>
+      <p>插件已通过 window.__ModuleLoader__ 加载。右下角是真实宠物组件；这里可模拟 Harness 活动信号、切换宠物与外观主题。</p>
+
+      <div class="sim">
+        <strong>模拟 Harness 活动信号（供行为引擎感知）</strong>
+        <div class="row">
+          <label><input type="checkbox" id="sim-run"> 运行中（出现“停止生成”按钮）</label>
+          <label><input type="checkbox" id="sim-stream"> [data-streaming] 流式输出</label>
+        </div>
+        <div class="row">
+          <label><input type="checkbox" id="sim-think"> [data-state=running] 思考</label>
+          <label><input type="checkbox" id="sim-error"> [data-error] 出错</label>
+        </div>
+        <textarea id="sim-composer" placeholder="在这里输入，模拟 composer 打字（触发 typing 状态）"></textarea>
+      </div>
+
+      <div class="demo-row">
+        <button type="button" id="sim-pet">摸摸</button>
+        <button type="button" id="sim-feed">喂食</button>
+        <button type="button" id="sim-play">玩耍</button>
+        <button type="button" id="sim-theme">切换深色</button>
+      </div>
+      <div class="demo-row" id="pet-switcher"></div>
+      <div class="state-out" id="state-out">state: -</div>
+      <pre id="pet-errors" style="white-space:pre-wrap;font-size:11px;color:#dc2626;margin:0;display:none"></pre>
+    </div>
+  </div>
+
+  <div id="sim-harness" style="display:none">
+    <button type="button" aria-label="停止生成" id="sim-stop"></button>
+    <div data-streaming id="sim-stream-el"></div>
+    <div data-state="running" id="sim-think-el"></div>
+    <div data-error id="sim-error-el"></div>
+    <div data-composer-seat id="sim-seat">
+      <textarea id="sim-composer-real"></textarea>
+    </div>
+  </div>
+
+  <script>
+    var loadedSpec = null
+    window.__ModuleLoader__ = {
+      load: function (spec) { loadedSpec = spec }
+    }
+    window.addEventListener('error', function (event) {
+      var box = document.getElementById('pet-errors')
+      if (box) {
+        box.style.display = 'block'
+        box.textContent += (event.message || event.error || 'unknown') + '\n'
+      }
+    })
+    window.addEventListener('unhandledrejection', function (event) {
+      var box = document.getElementById('pet-errors')
+      if (box) {
+        box.style.display = 'block'
+        box.textContent += 'rejection: ' + (event.reason && event.reason.message ? event.reason.message : event.reason) + '\n'
+      }
+    })
+  </script>
+  <script src="../lib/client.js"></script>
+  <script>
+    (function () {
+      var cleanup = null
+      var module = loadedSpec.factory(function () {
+        throw new Error("preview: no external modules required")
+      })
+      module.apply({
+        effect: function (fn) { cleanup = fn() }
+      })
+
+      var simRun = document.getElementById('sim-run')
+      var simStream = document.getElementById('sim-stream')
+      var simThink = document.getElementById('sim-think')
+      var simError = document.getElementById('sim-error')
+      var simStop = document.getElementById('sim-stop')
+      var simStreamEl = document.getElementById('sim-stream-el')
+      var simThinkEl = document.getElementById('sim-think-el')
+      var simErrorEl = document.getElementById('sim-error-el')
+
+      function ensureNode(element, present, parent) {
+        var attached = Boolean(element.parentNode)
+        if (present && !attached) parent.appendChild(element)
+        if (!present && attached) parent.removeChild(element)
+      }
+      function syncSim() {
+        ensureNode(simStop, simRun.checked, document.getElementById('sim-harness'))
+        ensureNode(simStreamEl, simStream.checked, document.getElementById('sim-harness'))
+        ensureNode(simThinkEl, simThink.checked, document.getElementById('sim-harness'))
+        ensureNode(simErrorEl, simError.checked, document.getElementById('sim-harness'))
+      }
+      simRun.addEventListener('change', syncSim)
+      simStream.addEventListener('change', syncSim)
+      simThink.addEventListener('change', syncSim)
+      simError.addEventListener('change', syncSim)
+      syncSim()
+
+      document.getElementById('sim-pet').onclick = function () { window.dshPet.trigger('interaction:pet') }
+      document.getElementById('sim-feed').onclick = function () { window.dshPet.trigger('interaction:feed') }
+      document.getElementById('sim-play').onclick = function () { window.dshPet.trigger('interaction:play') }
+      document.getElementById('sim-theme').onclick = function () {
+        document.body.toggleAttribute('data-ds-dark-theme')
+      }
+
+      var switcher = document.getElementById('pet-switcher')
+      var pets = window.dshPet.listPets()
+      pets.forEach(function (pet) {
+        var btn = document.createElement('button')
+        btn.type = 'button'
+        btn.textContent = pet.name
+        btn.onclick = function () { window.dshPet.selectPet(pet.id) }
+        switcher.appendChild(btn)
+      })
+
+      var stateOut = document.getElementById('state-out')
+      window.dshPet.on('state', function (event) {
+        stateOut.textContent = 'state: ' + event.state + ' (pet: ' + event.pet + ')'
+      })
+      window.dshPet.on('select', function (event) {
+        stateOut.textContent = 'selected: ' + event.pet
+      })
+
+      // Optional URL hash for scripted checks, e.g. /preview/#happy
+      if (location.hash) {
+        var hashState = location.hash.slice(1)
+        window.dshPet.setState(hashState, { bubbles: false, hold: true })
+      }
+    })()
+  </script>
+</body>
+</html>

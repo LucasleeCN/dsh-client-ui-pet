@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.tgz
+.DS_Store
+__pycache__/
+*.pyc
+
+# 原始状态图体积大（单张 3-4MB），不进 Git / npm 包；
+# 已压缩的 *.webp 与生成的定义 JSON 会保留，重建流程见 assets/README.txt。
+assets/deepseek-whale/*.png
+assets/pipeline-check/

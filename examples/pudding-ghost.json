@@ -1,0 +1,36 @@
+{
+  "id": "pudding-ghost",
+  "name": "布丁幽灵",
+  "version": "1.0.0",
+  "author": "you",
+  "description": "示例自定义宠物：一只会弹跳的小幽灵。",
+  "size": { "min": 64, "max": 240, "default": 112 },
+  "colors": [
+    { "key": "primary", "label": "身体", "default": "#c084fc" },
+    { "key": "secondary", "label": "高光", "default": "#f3e8ff" },
+    { "key": "accent", "label": "眼睛", "default": "#4c1d95" }
+  ],
+  "svg": "<ellipse class=\"p-shadow\" cx=\"100\" cy=\"188\" rx=\"40\" ry=\"6\" fill=\"#0f172a\" opacity=\"0.10\"/><g class=\"p-body\"><path d=\"M52 150 C40 96 58 54 100 54 C142 54 160 96 148 150 L132 134 L116 150 L100 134 L84 150 L68 134 Z\" fill=\"var(--dsh-pet-c-primary, #c084fc)\"/><ellipse cx=\"76\" cy=\"96\" rx=\"9\" ry=\"6\" fill=\"var(--dsh-pet-c-secondary, #f3e8ff)\" opacity=\"0.8\"/><g class=\"dsh-pet-expr\" data-expr=\"idle\" data-expr-default><circle cx=\"82\" cy=\"98\" r=\"5.4\" fill=\"var(--dsh-pet-c-accent, #4c1d95)\"/><circle cx=\"118\" cy=\"98\" r=\"5.4\" fill=\"var(--dsh-pet-c-accent, #4c1d95)\"/><circle cx=\"84\" cy=\"96\" r=\"1.8\" fill=\"#ffffff\"/><circle cx=\"120\" cy=\"96\" r=\"1.8\" fill=\"#ffffff\"/><path d=\"M93 116 Q100 122 107 116\" fill=\"none\" stroke=\"var(--dsh-pet-c-accent, #4c1d95)\" stroke-width=\"2.4\" stroke-linecap=\"round\"/></g><g class=\"dsh-pet-expr\" data-expr=\"happy\"><path d=\"M76 98 Q82 90 88 98\" fill=\"none\" stroke=\"var(--dsh-pet-c-accent, #4c1d95)\" stroke-width=\"2.8\" stroke-linecap=\"round\"/><path d=\"M112 98 Q118 90 124 98\" fill=\"none\" stroke=\"var(--dsh-pet-c-accent, #4c1d95)\" stroke-width=\"2.8\" stroke-linecap=\"round\"/><path d=\"M90 115 Q100 124 110 115\" fill=\"#f9a8d4\"/></g><g class=\"dsh-pet-expr\" data-expr=\"sleep\"><path d=\"M76 98 L88 98\" stroke=\"var(--dsh-pet-c-accent, #4c1d95)\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><path d=\"M112 98 L124 98\" stroke=\"var(--dsh-pet-c-accent, #4c1d95)\" stroke-width=\"2.6\" stroke-linecap=\"round\"/><circle cx=\"100\" cy=\"118\" r=\"2.2\" fill=\"var(--dsh-pet-c-accent, #4c1d95)\"/></g></g>",
+  "style": ".dsh-pet-root[data-state=\"idle\"] .p-body { animation: dsh-pg-bob 3s ease-in-out infinite; transform-origin: 100px 160px; }\n.dsh-pet-root[data-state=\"happy\"] .p-body { animation: dsh-pg-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: 100px 160px; }\n.dsh-pet-root[data-state=\"sleep\"] .p-body { animation: dsh-pg-float 3.6s ease-in-out infinite; transform-origin: 100px 160px; }\n@keyframes dsh-pg-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }\n@keyframes dsh-pg-pop { 0% { transform: scale(1); } 45% { transform: scale(1.08, 0.94); } 100% { transform: scale(1); } }\n@keyframes dsh-pg-float { 0%,100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-8px) rotate(1deg); } }\n.dsh-pet-root[data-state=\"happy\"] .dsh-pet-expr[data-expr=\"happy\"] { display: inline; }\n.dsh-pet-root[data-state=\"happy\"] .dsh-pet-expr[data-expr-default] { display: none; }\n.dsh-pet-root[data-state=\"sleep\"] .dsh-pet-expr[data-expr=\"sleep\"] { display: inline; }\n.dsh-pet-root[data-state=\"sleep\"] .dsh-pet-expr[data-expr-default] { display: none; }",
+  "states": {
+    "idle": { "label": "空闲", "hold": true },
+    "happy": { "label": "开心", "durationMs": 1800 },
+    "sleep": { "label": "睡觉", "hold": true }
+  },
+  "behaviors": [
+    { "trigger": "activity:working", "state": "idle", "hold": true, "bubbles": ["幽灵也在陪你干活～"], "cooldownMs": 20000 },
+    { "trigger": "activity:done", "state": "happy", "effect": "sparkles", "mood": 2, "affinity": 1, "bubbles": ["完成啦！"] },
+    { "trigger": "wake", "state": "idle", "hold": true, "bubbles": ["睡醒啦～"] },
+    { "trigger": "birth", "state": "happy", "effect": "hearts", "bubbles": ["你好，我是{name}！"] }
+  ],
+  "interactions": {
+    "pet": { "state": "happy", "effect": "hearts", "mood": 5, "affinity": 1, "bubbles": ["软乎乎的～"], "cooldownMs": 1500 },
+    "feed": { "state": "happy", "effect": "food", "mood": 12, "affinity": 2, "bubbles": ["幽灵吃饱啦～"], "cooldownMs": 4000 },
+    "play": { "state": "happy", "effect": "sparkles", "mood": 8, "affinity": 2, "bubbles": ["飘来飘去～"], "cooldownMs": 3000 }
+  },
+  "bubbles": {
+    "idle": ["我飘在这里陪你～", "需要帮忙吗？"],
+    "sleep": ["Zzz…"],
+    "happy": ["嘿嘿～"]
+  }
+}

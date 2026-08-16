@@ -1,0 +1,15 @@
+# dsh-client-ui-pet bundle patch.
+#
+# Adds the browser-side companion pet row to the web composition. The package
+# is a `dsh.client` dual-face package: the node half is an empty Loader entry,
+# the browser half injects a draggable SVG pet, the Codex-style status overlay
+# (bubble + state chip + interactions), and a full customization panel. Pet
+# appearance, states, animations, and behaviors are developer-defined through
+# the `dshPetDefinition` schema; built-ins live inside lib/client.js and extra
+# pets can be registered at runtime via `window.dshPet.registerPet()` or
+# imported as JSON in the panel's developer studio.
+- insert:
+    - id: ui-pet
+      name: 'dsh-client-ui-pet'
+      config:
+        enabled: true

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>dsh-client-ui-pet · JPG 宠物渲染验证</title>
+  <style>
+    :root {
+      --dsw-alias-label-primary: #0f172a;
+      --dsw-alias-label-secondary: #334155;
+      --dsw-alias-label-tertiary: #475569;
+      --dsw-alias-label-dimmed: rgba(51, 65, 85, 0.55);
+      --dsw-alias-bg-base: #eef2f7;
+      --dsw-alias-bg-layer-1: rgba(255, 255, 255, 0.62);
+      --dsw-alias-bg-overlay: rgba(255, 255, 255, 0.95);
+      --dsw-alias-bg-skeleton: rgba(15, 23, 42, 0.08);
+      --dsw-alias-border-l2: rgba(0, 0, 0, 0.08);
+      --dsw-alias-interactive-bg-hover: rgba(38, 49, 72, 0.08);
+      --dsw-alias-state-success-primary: #16a34a;
+      --dsw-alias-state-error-primary: #dc2626;
+    }
+    body { margin: 0; min-height: 100vh; background: var(--dsw-alias-bg-base); color: var(--dsw-alias-label-primary); font-family: system-ui, sans-serif; }
+    .info {
+      position: fixed; left: 24px; top: 24px; width: 320px;
+      border: 1px solid var(--dsw-alias-border-l2); border-radius: 14px;
+      background: var(--dsw-alias-bg-overlay); padding: 14px;
+      font-size: 12px; line-height: 1.6; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+    }
+    .info b { display: block; margin-bottom: 6px; }
+    #raster-status { font-family: ui-monospace, Consolas, monospace; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <b>JPG 宠物渲染验证</b>
+    <div id="raster-status">loading…</div>
+  </div>
+
+  <script>
+    var loadedSpec = null
+    window.__ModuleLoader__ = { load: function (spec) { loadedSpec = spec } }
+    window.addEventListener('error', function (event) {
+      var box = document.getElementById('raster-status')
+      if (box) box.textContent += '\nERROR: ' + (event.message || event.error || 'unknown')
+    })
+  </script>
+  <script src="../lib/client.js"></script>
+  <script>
+    (function () {
+      var module = loadedSpec.factory(function () { throw new Error('no external modules required') })
+      module.apply({ effect: function () {} })
+
+      var params = new URLSearchParams(location.search)
+      var petId = params.get('pet') || 'deepseek-whale'
+      var embed = params.get('embed') === '1'
+      var definitionUrl = '/plugins/dsh-client-ui-pet/assets/' + petId + '/' +
+        petId + (embed ? '.embed' : '') + '.definition.json'
+
+      fetch(definitionUrl)
+        .then(function (response) {
+          if (!response.ok) throw new Error('definition HTTP ' + response.status)
+          return response.json()
+        })
+        .then(function (definition) {
+          var result = window.dshPet.registerPet(definition)
+          var alreadyBuiltin = !result.ok && window.dshPet.listPets().some(function (pet) {
+            return pet.id === definition.id
+          })
+          if (!result.ok && !alreadyBuiltin) throw new Error('registerPet: ' + result.errors.join('; '))
+          window.dshPet.selectPet(definition.id)
+          if (location.hash) {
+            window.dshPet.setState(location.hash.slice(1), { bubbles: false, hold: true })
+          }
+          var img = document.getElementById('dsh-client-ui-pet-raster')
+          var status = document.getElementById('raster-status')
+          if (!img) throw new Error('raster img not mounted')
+          var report = function () {
+            status.textContent = 'id: ' + definition.id +
+              '\nstate: ' + (img.getAttribute('data-state') || '-') +
+              '\nsrc: ' + img.getAttribute('src') +
+              '\nnaturalWidth: ' + img.naturalWidth + ' x ' + img.naturalHeight +
+              '\nloaded: ' + (img.complete && img.naturalWidth > 0)
+          }
+          if (img.complete) report()
+          else img.addEventListener('load', report)
+          img.addEventListener('error', function () { status.textContent += '\nIMG ERROR: ' + img.src })
+        })
+        .catch(function (error) {
+          var box = document.getElementById('raster-status')
+          if (box) box.textContent = 'FAILED: ' + error.message
+        })
+    })()
+  </script>
+</body>
+</html>

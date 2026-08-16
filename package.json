@@ -1,0 +1,61 @@
+{
+  "name": "dsh-client-ui-pet",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness web UI pet plugin: Codex-style companion pets with hand-drawn SVG pets (DeepSeek whale girl included), activity-reactive behaviors, light raising stats, a full customization panel, and a developer pet-definition API.",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "plugin",
+    "client-plugin",
+    "pet",
+    "companion",
+    "desktop-pet",
+    "webui"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasleeCN/dsh-client-ui-pet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LucasleeCN/dsh-client-ui-pet/issues"
+  },
+  "homepage": "https://github.com/LucasleeCN/dsh-client-ui-pet#readme",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "LICENSE",
+    "README.md",
+    "assets/**/*",
+    "!assets/deepseek-whale/*.png",
+    "!assets/pipeline-check/**",
+    "examples/pudding-ghost.json"
+  ],
+  "scripts": {
+    "test": "node test/client.test.mjs",
+    "check": "node --check lib/index.js && node --check lib/client.js && npm test",
+    "preview": "node preview/server.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [],
+      "immediately": true
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
